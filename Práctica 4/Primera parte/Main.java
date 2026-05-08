@@ -1,5 +1,9 @@
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Lock;
+
+
 
 
 public class Main {
@@ -22,7 +26,7 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-        }
+        }s
 
         System.out.println("Contador final: " + counter.getCount());
     }
@@ -44,6 +48,8 @@ class MyThread implements Runnable{
             System.out.println("Hilo " + Thread.currentThread().getName() + " iniciado.");
             Thread.sleep(random.nextInt(100));
 
+
+            //Tambien podemos usar el lock para evitar condiciones de carrera
             // synchronized (counter) { // añadiendo synchronized para evitar condiciones de carrera (1ª forma)
                 counter.increment();
             // }
@@ -56,18 +62,26 @@ class MyThread implements Runnable{
 }
 
 class Counter{
-    public AtomicInteger count;
+    public int count; // Utilizando AtomicInteger para evitar condición de carrera (hay que cambiar los metodos)
+    Lock lock = new ReentrantLock(); // Utilizando Lock para evitar condición de carrera (hay que cambiar los metodos)
 
     public Counter(){
-        count = new AtomicInteger(0);
+        count = 0;
+        
     }
 
     public void increment(){ //añadiendo synchronized para evitar condiciones de carrera (2ª forma)
-        count.incrementAndGet();
+        lock.lock();
+        try {
+            count++;
+        } finally {
+            lock.unlock();
+        }
+        
     }
 
     public int getCount(){ //añadiendo synchronized para evitar condiciones de carrera (2ª forma)
-        return count.get();
+        return count;
     }
 
 }
