@@ -1,7 +1,6 @@
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 
@@ -26,7 +25,7 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-        }s
+        }
 
         System.out.println("Contador final: " + counter.getCount());
     }
